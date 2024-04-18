@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,19 +14,32 @@ class MenuScreenController extends GetxController {
     fetchMenuItems();
   }
 
-  Future<void> fetchMenuItems() async {
-    try {
-      final response = await http.get(
-        'https://opendining.net/api/v1/restaurants/5f3d94f937ab46182b7b23da/menu/tier?include_combo=true&key=6d6bf06a4f653a54da8d88715a736a4ca6071ffb' as Uri,
-      );
-      if (response.statusCode == 200) {
-        menuItems = MenuItem.fromJson(json.decode(response as String)) as List<MenuItem>;
+  bool isLoading = false;
 
+  Future<void> fetchMenuItems() async {
+    const url =
+        'https://opendining.net/api/v1/restaurants/5f3d94f937ab46182b7b23da/menu/tier?include_combo=true&key=6d6bf06a4f653a54da8d88715a736a4ca6071ffb';
+
+    try {
+      isLoading = true;
+      menuItems = [];
+      update();
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        final myData = MenuItems.fromJson(jsonResponse);
+        menuItems = myData.menu?.first.items ?? [];
+        debugPrint(myData.menu?[0].name);
+        update();
       } else {
-        throw Exception('Failed to load menu items');
+        debugPrint('Request failed with status: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching menu items: $e');
+      debugPrint('Error: $e');
+    } finally {
+      isLoading = false;
+      update();
     }
   }
 }

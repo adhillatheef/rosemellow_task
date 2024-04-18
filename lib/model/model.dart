@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-Menu menuFromJson(String str) => Menu.fromJson(json.decode(str));
+MenuItems menuItemsFromJson(String str) => MenuItems.fromJson(json.decode(str));
 
-String menuToJson(Menu data) => json.encode(data.toJson());
+String menuItemsToJson(MenuItems data) => json.encode(data.toJson());
 
-class Menu {
-  List<MenuElement>? menu;
+class MenuItems {
+  List<Menu>? menu;
   String? id;
   String? name;
   bool? canOrder;
   MenuTagging? menuTagging;
   String? apiRequestId;
 
-  Menu({
+  MenuItems({
     this.menu,
     this.id,
     this.name,
@@ -21,17 +21,23 @@ class Menu {
     this.apiRequestId,
   });
 
-  factory Menu.fromJson(Map<String, dynamic> json) => Menu(
-    menu: json["menu"] == null ? [] : List<MenuElement>.from(json["menu"]!.map((x) => MenuElement.fromJson(x))),
+  factory MenuItems.fromJson(Map<String, dynamic> json) => MenuItems(
+    menu: json['menu'] != null
+        ? List<Menu>.from(json['menu'].map((x) => Menu.fromJson(x)))
+        : [],
     id: json["id"],
     name: json["name"],
     canOrder: json["can_order"],
-    menuTagging: json["menu_tagging"] == null ? null : MenuTagging.fromJson(json["menu_tagging"]),
+    menuTagging: json["menu_tagging"] == null
+        ? null
+        : MenuTagging.fromJson(json["menu_tagging"]),
     apiRequestId: json["api_request_id"],
   );
 
   Map<String, dynamic> toJson() => {
-    "menu": menu == null ? [] : List<dynamic>.from(menu!.map((x) => x.toJson())),
+    "menu": menu != null
+        ? List<dynamic>.from(menu!.map((x) => x.toJson()))
+        : [],
     "id": id,
     "name": name,
     "can_order": canOrder,
@@ -40,7 +46,7 @@ class Menu {
   };
 }
 
-class MenuElement {
+class Menu {
   Id? id;
   String? name;
   String? posName;
@@ -49,7 +55,7 @@ class MenuElement {
   bool? canOrder;
   bool? isHidden;
 
-  MenuElement({
+  Menu({
     this.id,
     this.name,
     this.posName,
@@ -59,12 +65,17 @@ class MenuElement {
     this.isHidden,
   });
 
-  factory MenuElement.fromJson(Map<String, dynamic> json) => MenuElement(
+  factory Menu.fromJson(Map<String, dynamic> json) => Menu(
     id: json["id"] == null ? null : Id.fromJson(json["id"]),
     name: json["name"],
     posName: json["pos_name"],
-    priceList: json["price_list"] == null ? [] : List<String>.from(json["price_list"]!.map((x) => x)),
-    items: json["items"] == null ? [] : List<MenuItem>.from(json["items"]!.map((x) => MenuItem.fromJson(x))),
+    priceList: json["price_list"] == null
+        ? []
+        : List<String>.from(json["price_list"].map((x) => x)),
+    items: json["items"] == null
+        ? []
+        : List<MenuItem>.from(
+        json["items"].map((x) => MenuItem.fromJson(x))),
     canOrder: json["can_order"],
     isHidden: json["is_hidden"],
   );
@@ -73,8 +84,12 @@ class MenuElement {
     "id": id?.toJson(),
     "name": name,
     "pos_name": posName,
-    "price_list": priceList == null ? [] : List<dynamic>.from(priceList!.map((x) => x)),
-    "items": items == null ? [] : List<dynamic>.from(items!.map((x) => x.toJson())),
+    "price_list": priceList == null
+        ? []
+        : List<dynamic>.from(priceList!.map((x) => x)),
+    "items": items == null
+        ? []
+        : List<dynamic>.from(items!.map((x) => x.toJson())),
     "can_order": canOrder,
     "is_hidden": isHidden,
   };
@@ -184,19 +199,33 @@ class MenuItem {
     restaurant: json["restaurant"],
     description: json["description"],
     cal: json["cal"],
-    itemSlots: json["item_slots"] == null ? [] : List<ItemSlot>.from(json["item_slots"]!.map((x) => ItemSlot.fromJson(x))),
+    itemSlots: json["item_slots"] == null
+        ? []
+        : List<ItemSlot>.from(
+        json["item_slots"].map((x) => ItemSlot.fromJson(x))),
     skipSteps: json["skip_steps"],
     skipPopup: json["skip_popup"],
     useStepDescription: json["use_step_description"],
-    prices: json["prices"] == null ? [] : List<Price>.from(json["prices"]!.map((x) => Price.fromJson(x))),
-    images: json["images"] == null ? [] : List<String>.from(json["images"]!.map((x) => x)),
+    prices: json["prices"] == null
+        ? []
+        : List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
+    images: json["images"] == null
+        ? []
+        : List<String>.from(json["images"].map((x) => x)),
     category: json["category"],
     tz: json["tz"],
     canOrder: json["can_order"],
     id: json["id"],
-    dates: json["dates"] == null ? [] : List<dynamic>.from(json["dates"]!.map((x) => x)),
-    optionGroups: json["option_groups"] == null ? [] : List<OptionGroup>.from(json["option_groups"]!.map((x) => OptionGroup.fromJson(x))),
-    availableCombos: json["available_combos"] == null ? [] : List<String>.from(json["available_combos"]!.map((x) => x)),
+    dates: json["dates"] == null
+        ? []
+        : List<dynamic>.from(json["dates"].map((x) => x)),
+    optionGroups: json["option_groups"] == null
+        ? []
+        : List<OptionGroup>.from(
+        json["option_groups"].map((x) => OptionGroup.fromJson(x))),
+    availableCombos: json["available_combos"] == null
+        ? []
+        : List<String>.from(json["available_combos"].map((x) => x)),
     isSoldOut: json["is_sold_out"],
     displayPrice: json["display_price"],
     hasOptions: json["has_options"],
@@ -211,11 +240,18 @@ class MenuItem {
     noHandoff: json["no_handoff"],
     offlineOnly: json["offline_only"],
     pizza: json["pizza"] == null ? null : Pizza.fromJson(json["pizza"]),
-    pizzaGroups: json["pizza_groups"] == null ? [] : List<PizzaGroup>.from(json["pizza_groups"]!.map((x) => PizzaGroup.fromJson(x))),
+    pizzaGroups: json["pizza_groups"] == null
+        ? []
+        : List<PizzaGroup>.from(
+        json["pizza_groups"].map((x) => PizzaGroup.fromJson(x))),
     hours: json["hours"] == null ? null : Hours.fromJson(json["hours"]),
     noFirstParty: json["no_first_party"],
     noGoogle: json["no_google"],
-    excludeFromHandoffProviders: json["exclude_from_handoff_providers"] == null ? [] : List<dynamic>.from(json["exclude_from_handoff_providers"]!.map((x) => x)),
+    excludeFromHandoffProviders:
+    json["exclude_from_handoff_providers"] == null
+        ? []
+        : List<dynamic>.from(
+        json["exclude_from_handoff_providers"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -225,19 +261,28 @@ class MenuItem {
     "restaurant": restaurant,
     "description": description,
     "cal": cal,
-    "item_slots": itemSlots == null ? [] : List<dynamic>.from(itemSlots!.map((x) => x.toJson())),
+    "item_slots": itemSlots == null
+        ? []
+        : List<dynamic>.from(itemSlots!.map((x) => x.toJson())),
     "skip_steps": skipSteps,
     "skip_popup": skipPopup,
     "use_step_description": useStepDescription,
-    "prices": prices == null ? [] : List<dynamic>.from(prices!.map((x) => x.toJson())),
-    "images": images == null ? [] : List<dynamic>.from(images!.map((x) => x)),
+    "prices": prices == null
+        ? []
+        : List<dynamic>.from(prices!.map((x) => x.toJson())),
+    "images":
+    images == null ? [] : List<dynamic>.from(images!.map((x) => x)),
     "category": category,
     "tz": tz,
     "can_order": canOrder,
     "id": id,
     "dates": dates == null ? [] : List<dynamic>.from(dates!.map((x) => x)),
-    "option_groups": optionGroups == null ? [] : List<dynamic>.from(optionGroups!.map((x) => x.toJson())),
-    "available_combos": availableCombos == null ? [] : List<dynamic>.from(availableCombos!.map((x) => x)),
+    "option_groups": optionGroups == null
+        ? []
+        : List<dynamic>.from(optionGroups!.map((x) => x.toJson())),
+    "available_combos": availableCombos == null
+        ? []
+        : List<dynamic>.from(availableCombos!.map((x) => x)),
     "is_sold_out": isSoldOut,
     "display_price": displayPrice,
     "has_options": hasOptions,
@@ -252,79 +297,249 @@ class MenuItem {
     "no_handoff": noHandoff,
     "offline_only": offlineOnly,
     "pizza": pizza?.toJson(),
-    "pizza_groups": pizzaGroups == null ? [] : List<dynamic>.from(pizzaGroups!.map((x) => x.toJson())),
+    "pizza_groups": pizzaGroups == null
+        ? []
+        : List<dynamic>.from(pizzaGroups!.map((x) => x.toJson())),
     "hours": hours?.toJson(),
     "no_first_party": noFirstParty,
     "no_google": noGoogle,
-    "exclude_from_handoff_providers": excludeFromHandoffProviders == null ? [] : List<dynamic>.from(excludeFromHandoffProviders!.map((x) => x)),
+    "exclude_from_handoff_providers": excludeFromHandoffProviders == null
+        ? []
+        : List<dynamic>.from(excludeFromHandoffProviders!.map((x) => x)),
   };
 }
 
 class Hours {
-  String? mOpen;
-  String? mClose;
-  String? tOpen;
-  String? tClose;
-  String? wOpen;
-  String? wClose;
-  String? thOpen;
-  String? thClose;
-  String? fOpen;
-  String? fClose;
-  String? sOpen;
-  String? sClose;
-  String? suOpen;
-  String? suClose;
+  int? close;
+  int? open;
 
   Hours({
-    this.mOpen,
-    this.mClose,
-    this.tOpen,
-    this.tClose,
-    this.wOpen,
-    this.wClose,
-    this.thOpen,
-    this.thClose,
-    this.fOpen,
-    this.fClose,
-    this.sOpen,
-    this.sClose,
-    this.suOpen,
-    this.suClose,
+    this.close,
+    this.open,
   });
 
   factory Hours.fromJson(Map<String, dynamic> json) => Hours(
-    mOpen: json["m_open"],
-    mClose: json["m_close"],
-    tOpen: json["t_open"],
-    tClose: json["t_close"],
-    wOpen: json["w_open"],
-    wClose: json["w_close"],
-    thOpen: json["th_open"],
-    thClose: json["th_close"],
-    fOpen: json["f_open"],
-    fClose: json["f_close"],
-    sOpen: json["s_open"],
-    sClose: json["s_close"],
-    suOpen: json["su_open"],
-    suClose: json["su_close"],
+    close: json["close"],
+    open: json["open"],
   );
 
   Map<String, dynamic> toJson() => {
-    "m_open": mOpen,
-    "m_close": mClose,
-    "t_open": tOpen,
-    "t_close": tClose,
-    "w_open": wOpen,
-    "w_close": wClose,
-    "th_open": thOpen,
-    "th_close": thClose,
-    "f_open": fOpen,
-    "f_close": fClose,
-    "s_open": sOpen,
-    "s_close": sClose,
-    "su_open": suOpen,
-    "su_close": suClose,
+    "close": close,
+    "open": open,
+  };
+}
+
+class OptionGroup {
+  String? name;
+  int? min;
+  int? max;
+  List<OptionItem>? options;
+  String? description;
+
+  OptionGroup({
+    this.name,
+    this.min,
+    this.max,
+    this.options,
+    this.description,
+  });
+
+  factory OptionGroup.fromJson(Map<String, dynamic> json) => OptionGroup(
+    name: json["name"],
+    min: json["min"],
+    max: json["max"],
+    options: json["options"] == null
+        ? []
+        : List<OptionItem>.from(
+        json["options"].map((x) => OptionItem.fromJson(x))),
+    description: json["description"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "min": min,
+    "max": max,
+    "options": options == null
+        ? []
+        : List<dynamic>.from(options!.map((x) => x.toJson())),
+    "description": description,
+  };
+}
+
+class OptionItem {
+  String? name;
+  double? price;
+  String? id;
+  String? size;
+  int? quantity;
+
+  OptionItem({
+    this.name,
+    this.price,
+    this.id,
+    this.size,
+    this.quantity,
+  });
+
+  factory OptionItem.fromJson(Map<String, dynamic> json) => OptionItem(
+    name: json["name"],
+    price: json["price"].toDouble(),
+    id: json["id"],
+    size: json["size"],
+    quantity: json["quantity"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "price": price,
+    "id": id,
+    "size": size,
+    "quantity": quantity,
+  };
+}
+
+class Pizza {
+  List<dynamic>? toppings;
+  List<dynamic>? sizes;
+  List<dynamic>? crusts;
+  List<dynamic>? sauces;
+  List<dynamic>? cheeses;
+
+  Pizza({
+    this.toppings,
+    this.sizes,
+    this.crusts,
+    this.sauces,
+    this.cheeses,
+  });
+
+  factory Pizza.fromJson(Map<String, dynamic> json) => Pizza(
+    toppings: json["toppings"] == null
+        ? []
+        : List<dynamic>.from(json["toppings"].map((x) => x)),
+    sizes: json["sizes"] == null
+        ? []
+        : List<dynamic>.from(json["sizes"].map((x) => x)),
+    crusts: json["crusts"] == null
+        ? []
+        : List<dynamic>.from(json["crusts"].map((x) => x)),
+    sauces: json["sauces"] == null
+        ? []
+        : List<dynamic>.from(json["sauces"].map((x) => x)),
+    cheeses: json["cheeses"] == null
+        ? []
+        : List<dynamic>.from(json["cheeses"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "toppings":
+    toppings == null ? [] : List<dynamic>.from(toppings!.map((x) => x)),
+    "sizes": sizes == null ? [] : List<dynamic>.from(sizes!.map((x) => x)),
+    "crusts":
+    crusts == null ? [] : List<dynamic>.from(crusts!.map((x) => x)),
+    "sauces":
+    sauces == null ? [] : List<dynamic>.from(sauces!.map((x) => x)),
+    "cheeses":
+    cheeses == null ? [] : List<dynamic>.from(cheeses!.map((x) => x)),
+  };
+}
+
+class PizzaGroup {
+  String? name;
+  List<PizzaItem>? items;
+
+  PizzaGroup({
+    this.name,
+    this.items,
+  });
+
+  factory PizzaGroup.fromJson(Map<String, dynamic> json) => PizzaGroup(
+    name: json["name"],
+    items: json["items"] == null
+        ? []
+        : List<PizzaItem>.from(
+        json["items"].map((x) => PizzaItem.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "items": items == null
+        ? []
+        : List<dynamic>.from(items!.map((x) => x.toJson())),
+  };
+}
+
+class PizzaItem {
+  String? item;
+  List<String>? sizes;
+  int? optQty;
+  int? optCredit;
+  int? allOptCredit;
+  double? upcharge;
+  List<String>? optGroupsDist;
+  List<String>? optGroups;
+
+  PizzaItem({
+    this.item,
+    this.sizes,
+    this.optQty,
+    this.optCredit,
+    this.allOptCredit,
+    this.upcharge,
+    this.optGroupsDist,
+    this.optGroups,
+  });
+
+  factory PizzaItem.fromJson(Map<String, dynamic> json) => PizzaItem(
+    item: json["item"],
+    sizes: json["sizes"] == null
+        ? []
+        : List<String>.from(json["sizes"].map((x) => x)),
+    optQty: json["opt_qty"],
+    optCredit: json["opt_credit"],
+    allOptCredit: json["all_opt_credit"],
+    upcharge: json["upcharge"].toDouble(),
+    optGroupsDist: json["opt_groups_dist"] == null
+        ? []
+        : List<String>.from(json["opt_groups_dist"].map((x) => x)),
+    optGroups: json["opt_groups"] == null
+        ? []
+        : List<String>.from(json["opt_groups"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "item": item,
+    "sizes": sizes == null ? [] : List<dynamic>.from(sizes!.map((x) => x)),
+    "opt_qty": optQty,
+    "opt_credit": optCredit,
+    "all_opt_credit": allOptCredit,
+    "upcharge": upcharge,
+    "opt_groups_dist": optGroupsDist == null
+        ? []
+        : List<dynamic>.from(optGroupsDist!.map((x) => x)),
+    "opt_groups": optGroups == null
+        ? []
+        : List<dynamic>.from(optGroups!.map((x) => x)),
+  };
+}
+
+class Price {
+  String? name;
+  double? price;
+
+  Price({
+    this.name,
+    this.price,
+  });
+
+  factory Price.fromJson(Map<String, dynamic> json) => Price(
+    name: json["name"],
+    price: json["price"].toDouble(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "price": price,
   };
 }
 
@@ -332,8 +547,8 @@ class ItemSlot {
   String? name;
   String? description;
   int? qty;
-  int? basePrice;
-  List<ItemSlotItem>? items;
+  double? basePrice;
+  List<PizzaItem>? items;
   bool? useItemPrice;
 
   ItemSlot({
@@ -349,8 +564,11 @@ class ItemSlot {
     name: json["name"],
     description: json["description"],
     qty: json["qty"],
-    basePrice: json["base_price"],
-    items: json["items"] == null ? [] : List<ItemSlotItem>.from(json["items"]!.map((x) => ItemSlotItem.fromJson(x))),
+    basePrice: json["base_price"].toDouble(),
+    items: json["items"] == null
+        ? []
+        : List<PizzaItem>.from(
+        json["items"].map((x) => PizzaItem.fromJson(x))),
     useItemPrice: json["use_item_price"],
   );
 
@@ -359,212 +577,10 @@ class ItemSlot {
     "description": description,
     "qty": qty,
     "base_price": basePrice,
-    "items": items == null ? [] : List<dynamic>.from(items!.map((x) => x.toJson())),
+    "items": items == null
+        ? []
+        : List<dynamic>.from(items!.map((x) => x.toJson())),
     "use_item_price": useItemPrice,
-  };
-}
-
-class ItemSlotItem {
-  String? item;
-  dynamic sizes;
-  int? optQty;
-  int? optCredit;
-  int? allOptCredit;
-  int? upcharge;
-  List<String>? optGroupsDist;
-  List<String>? optGroups;
-
-  ItemSlotItem({
-    this.item,
-    this.sizes,
-    this.optQty,
-    this.optCredit,
-    this.allOptCredit,
-    this.upcharge,
-    this.optGroupsDist,
-    this.optGroups,
-  });
-
-  factory ItemSlotItem.fromJson(Map<String, dynamic> json) => ItemSlotItem(
-    item: json["item"],
-    sizes: json["sizes"],
-    optQty: json["opt_qty"],
-    optCredit: json["opt_credit"],
-    allOptCredit: json["all_opt_credit"],
-    upcharge: json["upcharge"],
-    optGroupsDist: json["opt_groups_dist"] == null ? [] : List<String>.from(json["opt_groups_dist"]!.map((x) => x)),
-    optGroups: json["opt_groups"] == null ? [] : List<String>.from(json["opt_groups"]!.map((x) => x)),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "item": item,
-    "sizes": sizes,
-    "opt_qty": optQty,
-    "opt_credit": optCredit,
-    "all_opt_credit": allOptCredit,
-    "upcharge": upcharge,
-    "opt_groups_dist": optGroupsDist == null ? [] : List<dynamic>.from(optGroupsDist!.map((x) => x)),
-    "opt_groups": optGroups == null ? [] : List<dynamic>.from(optGroups!.map((x) => x)),
-  };
-}
-
-class OptionGroup {
-  String? name;
-  bool? multiselect;
-  bool? quantities;
-  bool? complex;
-  List<Option>? options;
-  bool? catWide;
-  String? freeOpts;
-  int? min;
-  bool? card;
-  bool? collapsed;
-  int? max;
-
-  OptionGroup({
-    this.name,
-    this.multiselect,
-    this.quantities,
-    this.complex,
-    this.options,
-    this.catWide,
-    this.freeOpts,
-    this.min,
-    this.card,
-    this.collapsed,
-    this.max,
-  });
-
-  factory OptionGroup.fromJson(Map<String, dynamic> json) => OptionGroup(
-    name: json["name"],
-    multiselect: json["multiselect"],
-    quantities: json["quantities"],
-    complex: json["complex"],
-    options: json["options"] == null ? [] : List<Option>.from(json["options"]!.map((x) => Option.fromJson(x))),
-    catWide: json["cat_wide"],
-    freeOpts: json["free_opts"],
-    min: json["min"],
-    card: json["card"],
-    collapsed: json["collapsed"],
-    max: json["max"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "multiselect": multiselect,
-    "quantities": quantities,
-    "complex": complex,
-    "options": options == null ? [] : List<dynamic>.from(options!.map((x) => x.toJson())),
-    "cat_wide": catWide,
-    "free_opts": freeOpts,
-    "min": min,
-    "card": card,
-    "collapsed": collapsed,
-    "max": max,
-  };
-}
-
-class Option {
-  String? name;
-  double? price;
-  bool? isDefault;
-  bool? isDisabled;
-
-  Option({
-    this.name,
-    this.price,
-    this.isDefault,
-    this.isDisabled,
-  });
-
-  factory Option.fromJson(Map<String, dynamic> json) => Option(
-    name: json["name"],
-    price: json["price"]?.toDouble(),
-    isDefault: json["is_default"],
-    isDisabled: json["is_disabled"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "price": price,
-    "is_default": isDefault,
-    "is_disabled": isDisabled,
-  };
-}
-
-class Pizza {
-  List<dynamic>? extraToppings;
-
-  Pizza({
-    this.extraToppings,
-  });
-
-  factory Pizza.fromJson(Map<String, dynamic> json) => Pizza(
-    extraToppings: json["Extra Toppings"] == null ? [] : List<dynamic>.from(json["Extra Toppings"]!.map((x) => x)),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "Extra Toppings": extraToppings == null ? [] : List<dynamic>.from(extraToppings!.map((x) => x)),
-  };
-}
-
-class PizzaGroup {
-  String? wholeGroupName;
-  String? leftGroupName;
-  String? rightGroupName;
-  bool? allowDoubling;
-
-  PizzaGroup({
-    this.wholeGroupName,
-    this.leftGroupName,
-    this.rightGroupName,
-    this.allowDoubling,
-  });
-
-  factory PizzaGroup.fromJson(Map<String, dynamic> json) => PizzaGroup(
-    wholeGroupName: json["whole_group_name"],
-    leftGroupName: json["left_group_name"],
-    rightGroupName: json["right_group_name"],
-    allowDoubling: json["allow_doubling"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "whole_group_name": wholeGroupName,
-    "left_group_name": leftGroupName,
-    "right_group_name": rightGroupName,
-    "allow_doubling": allowDoubling,
-  };
-}
-
-class Price {
-  String? name;
-  double? price;
-  bool? isDefault;
-  String? weight;
-  int? unitCount;
-
-  Price({
-    this.name,
-    this.price,
-    this.isDefault,
-    this.weight,
-    this.unitCount,
-  });
-
-  factory Price.fromJson(Map<String, dynamic> json) => Price(
-    name: json["name"],
-    price: json["price"]?.toDouble(),
-    isDefault: json["is_default"],
-    weight: json["weight"],
-    unitCount: json["unit_count"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "price": price,
-    "is_default": isDefault,
-    "weight": weight,
-    "unit_count": unitCount,
   };
 }
 
@@ -579,12 +595,16 @@ class MenuTagging {
 
   factory MenuTagging.fromJson(Map<String, dynamic> json) => MenuTagging(
     en: json["en"],
-    tags: json["tags"] == null ? [] : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),
+    tags: json["tags"] == null
+        ? []
+        : List<Tag>.from(json["tags"].map((x) => Tag.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "en": en,
-    "tags": tags == null ? [] : List<dynamic>.from(tags!.map((x) => x.toJson())),
+    "tags": tags == null
+        ? []
+        : List<dynamic>.from(tags!.map((x) => x.toJson())),
   };
 }
 
